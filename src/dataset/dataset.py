@@ -7,14 +7,14 @@ from torch.utils.data import Dataset, IterableDataset, DataLoader
 import pytorch_lightning as pl
 
 from src.model.core import get_tokenizer
-from src.model.common import id_label_convert
+from src.utils.constant import ID2LABEL, LABEL2ID
 
 
 class DocumentDataset(Dataset):
     def __init__(self, document:str, window_size=384,step=307) -> None:
         super().__init__()
         self.tokenizer = get_tokenizer()
-        self.label2id, self.id2label = id_label_convert()
+        self.label2id, self.id2label = LABEL2ID, ID2LABEL
         self.document = document
         self.window_size = window_size
         self.step = step
@@ -87,7 +87,7 @@ class PunctStreamDataset(IterableDataset):
         """
         self.window_size = window_size
         self.tokenizer = get_tokenizer()
-        self.label2id, self.id2label = id_label_convert()
+        self.label2id, self.id2label = LABEL2ID, ID2LABEL
         self.queue = Queue(maxsize=maxsize)
         self.data_reader = DataReader(file_path, self.queue)
     

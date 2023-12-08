@@ -4,18 +4,6 @@ import math
 from typing import Tuple, List
 
 
-
-USE_ZH_PUNCTUATION = [
-    '，',
-    '、',
-    '。',
-    '？',
-    '！',
-    '；',
-]
-
-TOKENIER_CONF = '/mnt/AM4_disk9/chenwuchen/code/github/punc/bertpunc/mdl/bertpunc_conf'
-
 def id_label_convert():
     label2id = {}
     id2label = {}

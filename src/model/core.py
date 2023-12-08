@@ -9,7 +9,8 @@ from torch import optim
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import Callback
 
-from src.model.common import id_label_convert, USE_ZH_PUNCTUATION, TOKENIER_CONF
+from src.utils.common import id_label_convert
+from src.utils.constant import USE_ZH_PUNCTUATION, TOKENIER_CONF
 
 
 # base_mdl_dir = '/mnt/AM4_disk9/chenwuchen/code/github/punc/zhpr/mdl/'
@@ -17,15 +18,6 @@ from src.model.common import id_label_convert, USE_ZH_PUNCTUATION, TOKENIER_CONF
 
 
 def make_model_config(base_mdl):
-    # label2id = {}
-    # id2label = {}
-
-    # for x_id, x in enumerate(['O'] + USE_ZH_PUNCTUATION):
-    #     label = f"S-{x}"
-    #     if x_id == 0:
-    #         label = "O"
-    #     label2id[label] = x_id
-    #     id2label[x_id] = label
     label2id, id2label = id_label_convert()
 
     return BertConfig.from_pretrained(
@@ -154,6 +146,7 @@ class BertPunc(pl.LightningModule):
     #     return optimizer
 
     def configure_optimizers(self):
+        # ReduceLROnPlateau
         optimizer = optim.Adam(self.parameters(), lr=self.args.learning_rate)
         scheduler = optim.lr_scheduler.OneCycleLR(optimizer, max_lr=self.args.learning_rate, steps_per_epoch=self.args.steps_per_epoch, epochs=self.args.max_epochs)
         return [optimizer], [scheduler]
